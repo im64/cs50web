@@ -1,0 +1,17 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>is it x-mas?</title>
+        <link href={% static 'xmas/styles.css' %} rel="stylesheet">
+    </head>
+    <body>
+        {% if isxmas %}
+            <h1>yes</h1>
+        {% else %}
+            <h1>no</h1>
+        {% endif %}
+        <h2>{{ now }}</h2>
+    </body>
+</html>
