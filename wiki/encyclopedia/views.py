@@ -12,6 +12,24 @@ def index(request):
         "entries": util.list_entries()
     })
 
+def newpage(request):
+    if request.method != "POST":
+        return render(request, "encyclopedia/newpage.html")
+
+    name = request.POST["pagename"]
+    if name in util.list_entries():
+        return render(request, "encyclopedia/404.html", {
+            "name": str(name + "already exists"),
+        })
+
+    data = request.POST["content"]
+    util.save_entry(name, data)
+    return render(request, "encyclopedia/entry.html", {
+        "name": name,
+        "data": util.get_entry(name) 
+    })
+
+    
 
 def entry(request, entryName):
     data = util.get_entry(entryName)
