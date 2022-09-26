@@ -25,10 +25,7 @@ def newpage(request):
 
     data = request.POST["content"]
     util.save_entry(name, data)
-    return render(request, "encyclopedia/entry.html", {
-        "name": name,
-        "data": util.get_entry(name)
-    })
+    return entry(request, name)
 
 
 def entry(request, entryName):
@@ -44,11 +41,17 @@ def entry(request, entryName):
 
 
 def editpage(request, entryName):
-    data = util.get_entry(entryName)
-    return render(request, "encyclopedia/edit.html", {
-        "name": entryName,
-        "content": data,
-    })
+    if request.method == "GET":
+        return render(request, "encyclopedia/edit.html", {
+            "name": entryName,
+            "content": util.get_entry(entryName),
+        })
+    if request.method == "POST":
+        data = request.POST["content"]
+        util.save_entry(entryName, data)
+        print(data)
+        return entry(request, entryName)
+
     
 
 def search(request, query):
@@ -56,10 +59,7 @@ def search(request, query):
     for i in util.list_entries():
         # if full match -> redirect
         if query.lower() == i.lower():
-            return render(request, "encyclopedia/entry.html", {
-                "name": i,
-                "data": util.get_entry(i)
-            })
+            return entry(request, i)
         if query.lower() in i.lower():
             results.append(i)
 

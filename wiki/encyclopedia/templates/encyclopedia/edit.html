@@ -3,11 +3,9 @@
     Edit {{ name }}
 {% endblock title %}
 {% block body %}
-    <form id="editpage">
-        {% comment %} method="post" action="{% url 'newpage' %}"> {% endcomment %}
+    <form id="editpage" method="post" action="{% url 'edit' name %}">
         {% csrf_token %}
-        Enter new name: 
-        <input type="text" value="{{ name }}" name="pagename"/>
+        <b>{{ name }}</b>
         <input type="submit"/>
     </form>
     <br/>
