@@ -7,10 +7,11 @@ def index(request):
     q = request.GET.get("q")
     if q is not None:
         return search(request, q)
-    
+
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
     })
+
 
 def newpage(request):
     if request.method != "POST":
@@ -26,10 +27,9 @@ def newpage(request):
     util.save_entry(name, data)
     return render(request, "encyclopedia/entry.html", {
         "name": name,
-        "data": util.get_entry(name) 
+        "data": util.get_entry(name)
     })
 
-    
 
 def entry(request, entryName):
     data = util.get_entry(entryName)
@@ -42,6 +42,14 @@ def entry(request, entryName):
         "data": data
     })
 
+
+def editpage(request, entryName):
+    data = util.get_entry(entryName)
+    return render(request, "encyclopedia/edit.html", {
+        "name": entryName,
+        "content": data,
+    })
+    
 
 def search(request, query):
     results = []
@@ -56,7 +64,7 @@ def search(request, query):
             results.append(i)
 
     # if no matches -> 404
-    if not results: 
+    if not results:
         return render(request, "encyclopedia/404.html", {
             "name": query,
         })
@@ -66,4 +74,3 @@ def search(request, query):
         "entries": results,
         "query": query
     })
-

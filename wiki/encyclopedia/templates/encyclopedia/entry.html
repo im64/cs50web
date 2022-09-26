@@ -5,4 +5,5 @@
 {% block body %}
     <h1>{{ name }}</h1>
     {{ data }}
+    <a href="{% url 'edit' name %}">Edit page</a>
 {% endblock body %}
