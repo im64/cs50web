@@ -3,7 +3,6 @@
     {{ name }}
 {% endblock title %}
 {% block body %}
-    <h1>{{ name }}</h1>
-    {{ data }}
+    <p>{{ data|safe }}</p>
     <a href="{% url 'edit' entryName=name %}">Edit page</a>
 {% endblock body %}

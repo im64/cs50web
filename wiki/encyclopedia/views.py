@@ -1,6 +1,10 @@
 from django.shortcuts import render
-
+from markdown2 import Markdown
 from . import util
+
+import random as rnd
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 
 def index(request):
@@ -25,7 +29,13 @@ def newpage(request):
 
     data = request.POST["content"]
     util.save_entry(name, data)
-    return entry(request, name)
+    return HttpResponseRedirect(reverse("entry", args=[name]))
+    
+
+def random(request):
+    entries = util.list_entries()
+    return HttpResponseRedirect(reverse("entry", args=[rnd.choice(entries)]))
+    
 
 
 def entry(request, entryName):
@@ -36,7 +46,7 @@ def entry(request, entryName):
         })
     return render(request, "encyclopedia/entry.html", {
         "name": entryName,
-        "data": data
+        "data": Markdown().convert(data),
     })
 
 
@@ -50,7 +60,7 @@ def editpage(request, entryName):
         data = request.POST["content"]
         util.save_entry(entryName, data)
         print(data)
-        return entry(request, entryName)
+        return HttpResponseRedirect(reverse("entry", args=[entryName]))
 
     
 
@@ -59,7 +69,7 @@ def search(request, query):
     for i in util.list_entries():
         # if full match -> redirect
         if query.lower() == i.lower():
-            return entry(request, i)
+            return HttpResponseRedirect(reverse("entry", args=[i]))
         if query.lower() in i.lower():
             results.append(i)
 
